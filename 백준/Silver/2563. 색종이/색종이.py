@@ -1,3 +1,6 @@
+import sys
+input = sys.stdin.readline
+
 numOfPapers = int(input()) # 색종이 개수
 bigPaper = [[0] * 100 for _ in range(100)]
 
