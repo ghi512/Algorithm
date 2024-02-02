@@ -11,6 +11,6 @@ for _ in range(numOfPapers):
             bigPaper[i][j] = 1
 
 res = 0
-for i in range(100):
-    res += bigPaper[i].count(1)
+for i in bigPaper:
+    res += sum(i)
 print(res)
