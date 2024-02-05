@@ -1,9 +1,12 @@
+import sys
+input = sys.stdin.readline
+
 t = int(input())
 
 for _ in range(t):
     change = int(input())
-    q = change//25; change %= 25
-    d = change//10; change %= 10
-    n = change//5; change %= 5
-    p = change//1
+    q,change = divmod(change, 25)
+    d,change = divmod(change, 10)
+    n,change = divmod(change, 5)
+    p = change
     print(q, d, n, p)
