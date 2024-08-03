@@ -1,3 +1,2 @@
 def solution(arr):
-    answer = sum(arr)/len(arr)
-    return answer
+    return sum(arr)/len(arr)
