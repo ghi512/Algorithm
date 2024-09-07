@@ -2,8 +2,8 @@ n = int(input())
 nums = list(map(int, input().split()))
 ops = list(map(int, input().split())) # 차례대로 [덧셈,뺄셈,곱셈,나눗셈]
 
-min_num = 1000000001 # 10억
-max_num = -1000000001
+min_num = 1e9 # 10억
+max_num = -1e9
 
 def dfs(i, calc):
     global ops, min_num, max_num
@@ -34,5 +34,5 @@ def dfs(i, calc):
 
 
 dfs(1, nums[0])
-print(max_num)
-print(min_num)
+print(int(max_num))
+print(int(min_num))
