@@ -1,23 +1,26 @@
-import java.util.ArrayList;
+import java.util.Arrays;
 
 class Solution {
     public int[] solution(int[] numbers) {
-        ArrayList<Integer> temp = new ArrayList<>();
+        Arrays.sort(numbers);
         int len = numbers.length;
         
+        int[] sum = new int[len * (len-1) / 2];
+        int cnt = 0;
         
-        for(int i=0; i<numbers.length; i++) {
-            for(int j=i+1; j<numbers.length; j++) {
-                temp.add(numbers[i] + numbers[j]);
+        for(int i=0; i<len-1; i++) {
+            for(int j=i+1; j<len; j++) {
+                sum[cnt++] = numbers[i] + numbers[j];
             }
         }
         
-        int[] answer = temp.stream()
+        sum = Arrays.stream(sum)
+            .boxed()
             .distinct()
             .sorted()
             .mapToInt(Integer::intValue)
             .toArray();
         
-        return answer;
+        return sum;
     }
 }
