@@ -1,32 +1,47 @@
-import java.util.HashMap;
+import java.util.*;
 
 class Solution {
     public int[] solution(int N, int[] stages) {
-        // 1. 스테이지별 도전자 수 구함
-        int[] challenger = new int[N+2];
-        for(int i=0; i<stages.length; i++){
-            challenger[stages[i]] += 1;
+        // 스테이지별 멈춰 있는 사람
+        int[] count = new int[N+2];
+        for(int s : stages) {
+            count[s]++;
         }
         
-        // 2. 스테이지별 실패한 사용자 수 계산
-        HashMap<Integer,Double> fails = new HashMap<>();
-        double total = stages.length;
+        int total = stages.length; // 전체 사용자 수
+        double[] failRate = new double[N+2]; // 실패율
         
-        // 3. 각 스테이지를 순회하며 실패율 계산
-        for(int i=1; i<=N; i++){
-            // 3-1. 도전한 사람이 없으면 0
-            if(challenger[i]==0){
-                fails.put(i,0.);
+        int remaining = total;
+        for(int i=1; i<=N; i++) {
+            if(remaining == 0) {
+                failRate[i] = 0;
             }
-            // 3-2. 실패율 계산
-            else{
-                fails.put(i, challenger[i]/total);
-                total -= challenger[i];
+            else {
+                failRate[i] = (double) count[i] / remaining;
+                remaining -= count[i];
             }
         }
         
-        // 4. 실패율이 높은 스테이지부터 내림차 순으로 정렬
-        return fails.entrySet().stream().sorted((o1,o2) -> Double.compare(o2.getValue(), o1.getValue()))
-            .mapToInt(HashMap.Entry::getKey).toArray();
+        Integer[] stagesOrder = new Integer[N];
+        for(int i=0; i<N; i++) {
+            stagesOrder[i] = i+1;
+        }
+        
+        Arrays.sort(stagesOrder, (a,b) -> {
+            // 실패율이 같으면 번호 오름차순
+            if(failRate[a] == failRate[b]) {
+                return a-b;
+            }
+            // 실패율 내림차순
+            return Double.compare(failRate[b], failRate[a]);
+        });
+        
+        
+        int[] answer = new int[N];
+        for(int i=0; i<N; i++) {
+            answer[i] = stagesOrder[i];
+        }
+        
+        return answer;
     }
 }
