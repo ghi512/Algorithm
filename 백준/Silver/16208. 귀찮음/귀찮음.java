@@ -1,19 +1,19 @@
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
-        int sum = 0;
+        long n = sc.nextInt();
+        long sum = 0;
 
-        Integer[] arr = new Integer[n];
+        List<Integer> arr = new ArrayList<>();
+
         for (int i = 0; i < n; i++) {
-            arr[i] = sc.nextInt();
-            sum += arr[i];
+            int temp = sc.nextInt();
+            arr.add(temp);
+            sum += temp;
         }
-        Arrays.sort(arr, Collections.reverseOrder());
+        Collections.sort(arr);
 
         long answer = 0;
         for (int a : arr) {
