@@ -2,27 +2,26 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
-
-    static ArrayList<Integer>[] list; // 인접리스트
-    static boolean[] visited; // 방문배열
+    static ArrayList<Integer>[] list;
+    static boolean[] visited;
+    static int answer = 0;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
+        StringTokenizer st;
+        int N, M;
 
-        int n = Integer.parseInt(st.nextToken());
-        int m = Integer.parseInt(st.nextToken());
+        st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
 
-        list = new ArrayList[n+1]; // 정점의 개수 + 1개만큼 생성 (1~n까지 기록할 수 있도록)
-        visited = new boolean[n+1];
-
-        // 인접리스트 초기화
-        for(int i=1; i<n+1; i++) {
+        list = new ArrayList[N+1];
+        visited = new boolean[N+1];
+        for(int i=1; i<=N; i++) {
             list[i] = new ArrayList<Integer>();
         }
 
-        // 간선의 개수만큼 반복 실행
-        for(int i=0; i<m; i++) {
+        for(int i=0; i<M; i++) {
             st = new StringTokenizer(br.readLine());
             int u = Integer.parseInt(st.nextToken());
             int v = Integer.parseInt(st.nextToken());
@@ -30,25 +29,24 @@ public class Main {
             list[v].add(u);
         }
 
-        int count = 0;
-        for(int i=1; i<n+1; i++) {
+        int answer = 0;
+        for(int i=1; i<=N; i++) {
             if(!visited[i]) {
-                count++;
+                answer++;
                 DFS(i);
             }
         }
-
-        System.out.println(count);
+        System.out.println(answer);
     }
 
-    static void DFS(int v) {
-        if(visited[v]) {
+    static void DFS(int node) {
+        if(visited[node]) {
             return;
         }
 
-        visited[v] = true;
-        for(int i : list[v]) {
-            if(visited[i] == false) {
+        visited[node] = true;
+        for(int i : list[node]) {
+            if(!visited[i]) {
                 DFS(i);
             }
         }
