@@ -11,20 +11,20 @@ public class Main {
         long answer = 0;
 
         while(start <= end) {
-            long middle = (start + end) / 2;
-            long count = 0;
+            long mid = (start + end) / 2;
+            long cnt = 0;
 
-            // 중앙값보다 작은 수 개수 계산
+            // N개의 행을 돌면서 mid보다 작은 수의 개수 세기
             for(int i=1; i<=N; i++) {
-                count += Math.min(middle/i, N);
+                cnt += Math.min(mid/i, N);
             }
 
-            if(count < K) {
-                start = middle + 1;
+            if(cnt < K) {
+                start = mid + 1;
             }
             else {
-                answer = middle;
-                end = middle - 1;
+                answer = mid;
+                end = mid - 1;
             }
         }
 
