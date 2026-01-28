@@ -1,26 +1,26 @@
 import java.util.*;
+import java.io.*;
 
 public class Main {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int N = sc.nextInt();
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int N = Integer.parseInt(br.readLine());
 
-        PriorityQueue<Integer> pq = new PriorityQueue<>();
+        PriorityQueue<Integer> q = new PriorityQueue<>();
         for(int i=0; i<N; i++) {
-            pq.add(sc.nextInt());
+            q.add(Integer.parseInt(br.readLine()));
         }
 
-        int data1 = 0;
-        int data2 = 0;
-        int sum = 0;
+        int answer = 0;
+        while(q.size() > 1) {
 
-        while(pq.size() > 1) {
-            data1 = pq.remove();
-            data2 = pq.remove();
-            sum += (data1 + data2);
-            pq.add(data1 + data2);
+            int a = q.remove();
+            int b = q.remove();
+            int temp = a + b;
+            q.add(temp);
+            answer += temp;
         }
 
-        System.out.println(sum);
+        System.out.println(answer);
     }
 }
