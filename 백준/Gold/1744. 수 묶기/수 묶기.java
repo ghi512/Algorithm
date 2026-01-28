@@ -3,52 +3,53 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        int N = sc.nextInt();
+        int n = sc.nextInt();
 
-        PriorityQueue<Integer> plusPq = new PriorityQueue<>(Collections.reverseOrder()); // 1보다 큰 양수 (내림차순 정렬)
-        PriorityQueue<Integer> minusPq = new PriorityQueue<>(); // 음수
-        int one = 0; // 1의 개수
-        int zero = 0; // 0의 개수
+        PriorityQueue<Integer> plusQ = new PriorityQueue<>(Collections.reverseOrder());
+        PriorityQueue<Integer> minusQ = new PriorityQueue<>();
+        int one = 0;
+        int zero = 0;
 
-        for(int i=0; i<N; i++) {
-            int data = sc.nextInt();
-            if(data > 1) {
-                plusPq.add(data);
-            } else if (data == 1) {
+        for(int i=0; i<n; i++) {
+            int temp = sc.nextInt();
+
+            if(temp == 1) {
                 one++;
-            } else if (data == 0) {
+            }
+            else if(temp > 0) {
+                plusQ.add(temp);
+            }
+            else if (temp < 0) {
+                minusQ.add(temp);
+            }
+            else {
                 zero++;
-            } else {
-                minusPq.add(data);
             }
         }
 
-        int sum = 0;
+        int answer = 0;
 
-        // 양수 묶음 처리
-        while(plusPq.size() > 1) {
-            int first = plusPq.remove();
-            int second = plusPq.remove();
-            sum += (first * second);
+        while(plusQ.size() > 1) {
+            int a = plusQ.remove();
+            int b = plusQ.remove();
+            answer += (a * b);
         }
-        if(!plusPq.isEmpty()) {
-            sum += plusPq.remove();
+        if(!plusQ.isEmpty()) {
+            answer += plusQ.remove();
         }
 
-        // 음수 묶음 처리
-        while(minusPq.size() > 1) {
-            int first = minusPq.remove();
-            int second = minusPq.remove();
-            sum += (first * second);
+        while(minusQ.size() > 1) {
+            int a = minusQ.remove();
+            int b = minusQ.remove();
+            answer += (a * b);
         }
-        if(!minusPq.isEmpty()) {
+        if(!minusQ.isEmpty()) {
             if(zero == 0) {
-                sum += minusPq.remove();
+                answer += minusQ.remove();
             }
         }
 
-        // 1 처리
-        sum += one;
-        System.out.println(sum);
+        answer += one;
+        System.out.println(answer);
     }
 }
