@@ -1,38 +1,35 @@
-import java.util.ArrayDeque;
-import java.util.ArrayList;
+import java.util.*;
 
 class Solution {
     public int[] solution(int[] progresses, int[] speeds) {
-        // 1. 배포 가능 날짜를 담을 days 큐 선언
-        ArrayDeque<Integer> days = new ArrayDeque<>();
-        for(int i=0; i<progresses.length; i++){            
-            int n = (100-progresses[i]) % speeds[i] > 0 ? 
-                (100-progresses[i]) / speeds[i] + 1 : (100-progresses[i]) / speeds[i];
-            days.addLast(n);
-        }
-        days.addLast(-1); // 마지막 플래그 추가
+        Queue<Integer> q = new LinkedList<>();
+        int n = progresses.length;
         
-        // 2. 배포 가능 날짜에 따라 기능수 계산해서 answer에 추가
-        ArrayList<Integer> answer = new ArrayList<>();
-        int function_nums = 1;
-        int previous = days.pollFirst();
-        
-        while(!days.isEmpty()){
-            int x = days.pollFirst();
-            if (x < 0){
-                answer.add(function_nums);
-            }
-            else if (previous < x){
-                answer.add(function_nums);
-                function_nums = 1;
-                previous = x;
-            }
-            else {
-                function_nums++;
-            }
+        for(int i=0; i<n; i++) {
+            int leftDay = (100 - progresses[i]) / speeds[i];
+            if((100 - progresses[i]) % speeds[i] > 0) leftDay++;
+            q.offer(leftDay);
         }
         
-        // 3. 정답 return 
-        return answer.stream().mapToInt(Integer::intValue).toArray();
+        List<Integer> list = new ArrayList<>();
+        
+        while(!q.isEmpty()) {
+            int now = q.poll();
+            int count = 1;
+            
+            while(!q.isEmpty() && q.peek() <= now) {
+                q.poll();
+                count++;
+            }
+            
+            list.add(count);
+        }
+        
+        int[] answer = new int[list.size()];
+        for(int i=0; i<answer.length; i++) {
+            answer[i] = list.get(i);
+        }
+        
+        return answer;
     }
 }
