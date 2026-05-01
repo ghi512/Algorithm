@@ -1,19 +1,26 @@
-import java.util.Arrays;
+import java.util.*;
 
 class Solution {
     public String solution(int[] numbers) {
-        String[] nums = new String[numbers.length];
-        for(int i=0; i<nums.length; i++) {
-            nums[i] = Integer.toString(numbers[i]);
+        int n = numbers.length;
+        
+        String[] arr = new String[n];
+        for(int i=0; i<n; i++) {
+            arr[i] = String.valueOf(numbers[i]);
         }
         
-        String answer = "";
-        Arrays.sort(nums, (o1,o2) -> (o2+o1).compareTo(o1+o2));
+        // 내림차순 정렬
+        Arrays.sort(arr, (a,b) -> (b+a).compareTo(a+b));
         
-        for(int i=0; i<nums.length; i++) {
-            answer += nums[i];
+        StringBuilder sb = new StringBuilder();
+        for(String s : arr) {
+            sb.append(s);
         }
         
-        return answer.charAt(0) == '0' ? "0" : answer;
+        // 예외처리
+        if(sb.charAt(0) == '0') return "0";
+        
+        return sb.toString();
+        
     }
 }
