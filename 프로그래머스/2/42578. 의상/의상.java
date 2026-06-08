@@ -4,16 +4,17 @@ class Solution {
     public int solution(String[][] clothes) {
         HashMap<String, Integer> map = new HashMap<>();
         
-        for(int i=0; i<clothes.length; i++) {
-            String type = clothes[i][1];
+        for(String[] c : clothes) {
+            String type = c[1];
             map.put(type, map.getOrDefault(type, 0) + 1);
         }
         
+        // 의상 종류의 개수 + 1(안 입는 경우) 고려해서 계산
         int answer = 1;
-        for(int cnt: map.values()) {
-            answer *= (cnt + 1); // 종류별 전체 경우 + 1(안씀)
+        for(int cnt : map.values()) {
+            answer *= (cnt + 1);
         }
         
-        return answer - 1; // 모두 안쓴 경우 제외
+        return answer - 1;
     }
 }
