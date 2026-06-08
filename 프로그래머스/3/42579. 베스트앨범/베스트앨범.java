@@ -1,42 +1,51 @@
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.stream.Stream;
+import java.util.*;
 
 class Solution {
     public int[] solution(String[] genres, int[] plays) {
-        HashMap<String, ArrayList<int[]>> genreMap = new HashMap<>();
-        HashMap<String, Integer> playMap = new HashMap<>();
+        // 장르 - 누적재생수
+        HashMap<String, Integer> genrePlayMap = new HashMap<>();
+        // 장르 - {노래번호, 재생수}
+        HashMap<String, ArrayList<int[]>> songMap = new HashMap<>();
         
-        // 1. 장르별 총 횟수와 각 곡의 재생 횟수 저장
-        for(int i=0; i<genres.length; i++){
+        for(int i=0; i<genres.length; i++) {
             String genre = genres[i];
             int play = plays[i];
             
-            // genreMap에 현재 장르가 없는 경우 초기화
-            if(!genreMap.containsKey(genre)){
-                genreMap.put(genre, new ArrayList<>());
-                playMap.put(genre, 0);
-            }
-            
-            genreMap.get(genre).add(new int[]{i,play});
-            playMap.put(genre, playMap.get(genre)+play);
+            genrePlayMap.put(genre, genrePlayMap.getOrDefault(genre, 0) + play);
+            songMap.putIfAbsent(genre, new ArrayList<>());
+            songMap.get(genre).add(new int[] {i, play});
         }
         
-        // 2. 총 재생횟수가 많은 순으로 장르 내림차 정렬
-        Stream<Map.Entry<String, Integer>> sortedGenre =
-            playMap.entrySet().stream()
-            .sorted((o1,o2) -> Integer.compare(o2.getValue(), o1.getValue()));
+        // 장르를 누적 재생횟수 내림차순으로 정렬
+        List<String> genreList = new ArrayList<>(genrePlayMap.keySet());
+        genreList.sort(
+            (a,b) -> genrePlayMap.get(b) - genrePlayMap.get(a)
+        );
         
-        // 3. 각 장르 내에서 노래 횟수를 재생횟수 순으로 정렬하여 최대 2곡 선택
         ArrayList<Integer> answer = new ArrayList<>();
-        sortedGenre.forEach (entry -> {
-            Stream<int[]> sortedSongs = genreMap.get(entry.getKey()).stream()
-                .sorted((o1,o2) -> Integer.compare(o2[1], o1[1]))
-                .limit(2);
-            sortedSongs.forEach(song -> answer.add(song[0]));
-        });
         
-        return answer.stream().mapToInt(Integer::intValue).toArray();
+        for(String genre : genreList) {
+            ArrayList<int[]> songs = songMap.get(genre);
+            
+            songs.sort((a,b) -> {
+                // 재생수 같으면 번호 오름차순
+                if(a[1] == b[1]) {
+                    return a[0] - b[0];
+                }
+                return b[1] - a[1];
+            });
+            
+            answer.add(songs.get(0)[0]);
+            if(songs.size() > 1) {
+                answer.add(songs.get(1)[0]);
+            }
+        }
+        
+        int[] result = new int[answer.size()];
+        for(int i=0; i<answer.size(); i++) {
+            result[i] = answer.get(i);
+        }
+        
+        return result;
     }
 }
