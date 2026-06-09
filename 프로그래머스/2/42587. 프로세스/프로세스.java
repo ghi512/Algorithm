@@ -4,33 +4,32 @@ class Solution {
     public int solution(int[] priorities, int location) {
         Queue<int[]> q = new LinkedList<>();
         
-        // (우선순위, 인덱스)
         for(int i=0; i<priorities.length; i++) {
-            q.offer(new int[] {priorities[i], i});
+            q.offer(new int[] {i, priorities[i]});
         }
         
-        int order = 0;
-        while(true) {
-            int[] now = q.poll();
+        int cnt = 0;
+        while(!q.isEmpty()) {
+            int[] current = q.poll();            
+            boolean hasHigher = false;
             
-            boolean higher = false;
-            for(int[] p : q) {
-                if(p[0] > now[0]) {
-                    higher = true;
+            for(int[] process : q) {
+                if(process[1] > current[1]) {
+                    hasHigher = true;
                     break;
                 }
             }
             
-            if(higher) {
-                q.offer(now);
-            }
-            else {
-                order++;
-                if(now[1] == location) {
-                    return order;
+            if(hasHigher) {
+                q.offer(current);
+            } else {
+                cnt++;
+                if(current[0] == location) {
+                    return cnt;
                 }
             }
         }
         
+        return -1;
     }
 }
