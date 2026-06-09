@@ -3,31 +3,39 @@ import java.util.*;
 class Solution {
     public int[] solution(int[] progresses, int[] speeds) {
         Queue<Integer> q = new LinkedList<>();
-        int n = progresses.length;
         
-        for(int i=0; i<n; i++) {
-            int leftDay = (100 - progresses[i]) / speeds[i];
-            if((100 - progresses[i]) % speeds[i] > 0) leftDay++;
-            q.offer(leftDay);
+        for(int i=0; i<progresses.length; i++) {
+            int left = 100 - progresses[i];
+            if(left % speeds[i] == 0) {
+                left /= speeds[i];
+            } else {
+                left = left / speeds[i] + 1;
+            }
+            q.offer(left);
         }
         
-        List<Integer> list = new ArrayList<>();
+        ArrayList<Integer> answerList = new ArrayList<>();
+        
+        // 최초
+        int prev = q.poll();
+        int cnt = 1;
         
         while(!q.isEmpty()) {
-            int now = q.poll();
-            int count = 1;
-            
-            while(!q.isEmpty() && q.peek() <= now) {
+            if(prev >= q.peek()) {
                 q.poll();
-                count++;
+                cnt++;
             }
-            
-            list.add(count);
+            else {
+                answerList.add(cnt);
+                prev = q.poll();
+                cnt = 1;
+            }
         }
+        answerList.add(cnt);
         
-        int[] answer = new int[list.size()];
-        for(int i=0; i<answer.length; i++) {
-            answer[i] = list.get(i);
+        int[] answer = new int[answerList.size()];
+        for(int i=0; i<answerList.size(); i++) {
+            answer[i] = answerList.get(i);
         }
         
         return answer;
