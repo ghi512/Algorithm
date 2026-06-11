@@ -4,11 +4,8 @@ class Solution {
         int maxH = 0; // 짧은 변
         
         for(int[] card : sizes) {
-            int w = Math.max(card[0], card[1]);
-            int h = Math.min(card[0], card[1]);
-            
-            maxW = Math.max(maxW, w);
-            maxH = Math.max(maxH, h);
+            maxW = Math.max(maxW, Math.max(card[0], card[1]));
+            maxH = Math.max(maxH, Math.min(card[0], card[1]));
         }
         
         return maxW * maxH;
