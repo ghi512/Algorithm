@@ -1,52 +1,47 @@
 import java.util.*;
 
 class Solution {
-    // 상, 하, 좌, 우
-    private static final int[] dx = {0, 0, -1, 1};
-    private static final int[] dy = {1, -1, 0, 0};
-    
-    private static int[][] maps;
-    private static int N, M;
-    private static boolean[][] visited;
+    static int[] dx = {0, 0, -1, 1};
+    static int[] dy = {-1, 1, 0, 0};
     
     public int solution(int[][] maps) {
-        this.maps = maps;
-        N = maps.length;
-        M = maps[0].length;
+        int n = maps.length;
+        int m = maps[0].length;
         
-        // 내 위치 (0,0), 상대편 위치 (n-1, m-1)
-        visited = new boolean[N][M];
-        bfs();
-
-        if(maps[N-1][M-1] == 1) {
-            return -1;
-        }
-        return maps[N-1][M-1];
+        boolean[][] visited = new boolean[n][m];
         
-    }
-    
-    public void bfs() {
         Queue<int[]> q = new LinkedList<>();
-        q.add(new int[] {0,0});
+        q.offer(new int[] {0, 0, 1});
         visited[0][0] = true;
         
         while(!q.isEmpty()) {
-            int[] now = q.poll();
-                        
-            for(int d=0; d<4; d++) {
-                int nx = now[0] + dx[d];
-                int ny = now[1] + dy[d];
+            int[] current = q.poll();
+            
+            int x = current[0];
+            int y = current[1];
+            int dist = current[2];
+            
+            if(x == n-1 && y == m-1) {
+                return dist;
+            }
+            
+            for(int i=0; i<4; i++) {
+                int nx = x + dx[i];
+                int ny = y + dy[i];
                 
-                if(nx<0 || nx>=N || ny<0 || ny>=M) {
+                if(nx<0 || ny<0 || nx>=n || ny>=m) {
                     continue;
                 }
                 
-                if(!visited[nx][ny] && maps[nx][ny] == 1) {
-                    q.add(new int[] {nx,ny});
-                    visited[nx][ny] = true;
-                    maps[nx][ny] = maps[now[0]][now[1]] + 1;
+                if(maps[nx][ny] == 0 || visited[nx][ny]) {
+                    continue;
                 }
+                
+                visited[nx][ny] = true;
+                q.offer(new int[] {nx, ny, dist+1});
             }
         }
+        
+        return -1;
     }
 }
