@@ -3,21 +3,20 @@ import java.util.*;
 class Solution {
     public long solution(int n, int[] works) {
         PriorityQueue<Integer> pq = new PriorityQueue<>(
-            (a,b) -> b.compareTo(a)
+            Collections.reverseOrder()
         );
         
         for(int w : works) {
             pq.offer(w);
         }
         
-        int left_hours = n;
-        while(left_hours > 0 && !pq.isEmpty()) {
-            left_hours--;
+        while(n > 0 && !pq.isEmpty()) {
+            int work = pq.poll() - 1;
+            n--;
             
-            int temp = pq.poll();
-            if(temp == 1) continue;
+            if(work == 0) continue;
             
-            pq.offer(temp - 1);
+            pq.offer(work);
         }
         
         if(pq.isEmpty()) return 0;
@@ -25,7 +24,7 @@ class Solution {
         long answer = 0;
         while(!pq.isEmpty()) {
             int temp = pq.poll();
-            answer += (temp * temp);
+            answer += (long) Math.pow(temp, 2);
         }
         return answer;
     }
